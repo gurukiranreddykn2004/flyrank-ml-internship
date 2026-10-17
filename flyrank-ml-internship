@@ -1,0 +1,70 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPQ9PiTvhijI/uiAx9AvJck",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/gurukiranreddykn2004/flyrank-ml-internship/blob/main/flyrank-ml-internship\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "from pathlib import Path\n",
+        "\n",
+        "target_file = 'content_refresh_anonymized.csv'\n",
+        "current_dir = Path.cwd()\n",
+        "print(f\"Current Working Directory: {current_dir}\")\n",
+        "\n",
+        "# Searching from parent directory automatically covers current directory and its children\n",
+        "found = []\n",
+        "for root, _, files in os.walk(current_dir.parent):\n",
+        "    if target_file in files:\n",
+        "        full_path = os.path.join(root, target_file)\n",
+        "        print(f\"Found file at: {full_path}\")\n",
+        "        found.append(full_path)\n",
+        "\n",
+        "if not found:\n",
+        "    print(f\"'{target_file}' was not found in {current_dir.parent} or any subdirectories.\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "kapzOkNNb2WM",
+        "outputId": "ad2fee30-902b-45fe-8d4c-7a65222ccb4f"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Current Working Directory: /content\n",
+            "'content_refresh_anonymized.csv' was not found in / or any subdirectories.\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
