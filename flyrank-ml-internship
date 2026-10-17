@@ -4,7 +4,7 @@
   "metadata": {
     "colab": {
       "provenance": [],
-      "authorship_tag": "ABX9TyMVEPB+mYZNc9rdYIP2E4BU",
+      "authorship_tag": "ABX9TyP7dIwaFCVJPg+v9VsWVvFz",
       "include_colab_link": true
     },
     "kernelspec": {
@@ -28,40 +28,104 @@
     },
     {
       "cell_type": "code",
-      "execution_count": 1,
+      "source": [
+        "import pandas as pd\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.feature_extraction.text import TfidfVectorizer\n",
+        "from sklearn.linear_model import LogisticRegression\n",
+        "from sklearn.pipeline import Pipeline\n",
+        "from sklearn.metrics import classification_report, confusion_matrix, accuracy_score\n",
+        "\n",
+        "\n",
+        "data = {\n",
+        "    \"text\": [\n",
+        "        \"The company reported record quarterly earnings and strong growth.\",\n",
+        "        \"The economic outlook remains positive with rising stock markets.\",\n",
+        "        \"Severe storms and flash flooding damaged infrastructure across the region.\",\n",
+        "        \"The hurricane caused widespread power outages and road closures.\",\n",
+        "        \"Tech firms are accelerating investments in cloud computing and AI.\",\n",
+        "        \"Wildfires spread rapidly due to high winds and extreme drought conditions.\"\n",
+        "    ],\n",
+        "    \"label\": [\"Finance\", \"Finance\", \"Disaster\", \"Disaster\", \"Finance\", \"Disaster\"]\n",
+        "}\n",
+        "\n",
+        "df = pd.DataFrame(data)\n",
+        "\n",
+        "\n",
+        "X = df[\"text\"]\n",
+        "y = df[\"label\"]\n",
+        "\n",
+        "# Train/Test Split (stratified to balance class distributions)\n",
+        "X_train, X_test, y_train, y_test = train_test_split(\n",
+        "    X, y, test_size=0.33, random_state=42, stratify=y\n",
+        ")\n",
+        "\n",
+        "\n",
+        "model_pipeline = Pipeline([\n",
+        "    (\"tfidf\", TfidfVectorizer(ngram_range=(1, 2), stop_words=\"english\", lowercase=True)),\n",
+        "    (\"classifier\", LogisticRegression(class_weight=\"balanced\", random_state=42))\n",
+        "])\n",
+        "\n",
+        "\n",
+        "print(\"Training model pipeline...\")\n",
+        "model_pipeline.fit(X_train, y_train)\n",
+        "\n",
+        "\n",
+        "y_pred = model_pipeline.predict(X_test)\n",
+        "\n",
+        "print(\"\\n--- Evaluation Results ---\")\n",
+        "print(f\"Accuracy: {accuracy_score(y_test, y_pred):.2f}\\n\")\n",
+        "print(\"Classification Report:\")\n",
+        "print(classification_report(y_test, y_pred, zero_division=0))\n",
+        "\n",
+        "\n",
+        "new_samples = [\n",
+        "    \"Inflation numbers decreased, signaling strong market recovery.\",\n",
+        "    \"Emergency services are responding to massive flood warnings.\"\n",
+        "]\n",
+        "\n",
+        "predictions = model_pipeline.predict(new_samples)\n",
+        "probabilities = model_pipeline.predict_proba(new_samples)\n",
+        "\n",
+        "print(\"\\n--- Predictions on New Samples ---\")\n",
+        "for text, pred, prob in zip(new_samples, predictions, probabilities):\n",
+        "    max_prob = max(prob)\n",
+        "    print(f\"Text: '{text}' -> Predicted: {pred} (Confidence: {max_prob:.2%})\")"
+      ],
       "metadata": {
         "colab": {
           "base_uri": "https://localhost:8080/"
         },
-        "id": "nNvuJB7HsMJR",
-        "outputId": "820d041b-38bb-44dc-8d04-8bf2c6f486b3"
+        "id": "GgJjKZj6vzke",
+        "outputId": "afbb2e2e-0653-423e-9200-9df8d9af1c19"
       },
+      "execution_count": 11,
       "outputs": [
         {
-          "output_type": "execute_result",
-          "data": {
-            "text/plain": [
-              "{'feature': 'Dashboard sync',\n",
-              " 'feature_sentiment': 'Positive',\n",
-              " 'operational_complaints': ['Double billing after trial expiration',\n",
-              "  'Support resolution took 4 days',\n",
-              "  'Support representative did not apologize']}"
-            ]
-          },
-          "metadata": {},
-          "execution_count": 1
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Training model pipeline...\n",
+            "\n",
+            "--- Evaluation Results ---\n",
+            "Accuracy: 0.50\n",
+            "\n",
+            "Classification Report:\n",
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "    Disaster       0.00      0.00      0.00         1\n",
+            "     Finance       0.50      1.00      0.67         1\n",
+            "\n",
+            "    accuracy                           0.50         2\n",
+            "   macro avg       0.25      0.50      0.33         2\n",
+            "weighted avg       0.25      0.50      0.33         2\n",
+            "\n",
+            "\n",
+            "--- Predictions on New Samples ---\n",
+            "Text: 'Inflation numbers decreased, signaling strong market recovery.' -> Predicted: Finance (Confidence: 50.00%)\n",
+            "Text: 'Emergency services are responding to massive flood warnings.' -> Predicted: Finance (Confidence: 50.00%)\n"
+          ]
         }
-      ],
-      "source": [
-        "{\n",
-        "  \"feature\": \"Dashboard sync\",\n",
-        "  \"feature_sentiment\": \"Positive\",\n",
-        "  \"operational_complaints\": [\n",
-        "    \"Double billing after trial expiration\",\n",
-        "    \"Support resolution took 4 days\",\n",
-        "    \"Support representative did not apologize\"\n",
-        "  ]\n",
-        "}"
       ]
     }
   ]
