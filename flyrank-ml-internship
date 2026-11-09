@@ -4,7 +4,7 @@
   "metadata": {
     "colab": {
       "provenance": [],
-      "authorship_tag": "ABX9TyOGSnOGO/ec00oF8/VdVa6O",
+      "authorship_tag": "ABX9TyMRiCC/b1pFFTW1Fguww6Xf",
       "include_colab_link": true
     },
     "kernelspec": {
@@ -29,55 +29,55 @@
     {
       "cell_type": "code",
       "source": [
-        "import os\n",
         "from pathlib import Path\n",
-        "import pandas as pd\n",
         "\n",
-        "target_filename = \"content_refresh_anonymized.csv\"\n",
+        "html_content = \"\"\"<!DOCTYPE html>\n",
+        "<html lang=\"en\">\n",
+        "<head>\n",
+        "  <meta charset=\"UTF-8\">\n",
+        "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n",
+        "  <title>Portfolio | In Progress</title>\n",
+        "  <style>\n",
+        "    body {\n",
+        "      font-family: system-ui, -apple-system, sans-serif;\n",
+        "      display: flex;\n",
+        "      flex-direction: column;\n",
+        "      align-items: center;\n",
+        "      justify-content: center;\n",
+        "      min-height: 90vh;\n",
+        "      margin: 0;\n",
+        "      background: #f8fafc;\n",
+        "      color: #0f172a;\n",
+        "    }\n",
+        "    .card {\n",
+        "      text-align: center;\n",
+        "      padding: 2.5rem;\n",
+        "      background: white;\n",
+        "      border-radius: 12px;\n",
+        "      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);\n",
+        "    }\n",
+        "  </style>\n",
+        "</head>\n",
+        "<body>\n",
+        "  <div class=\"card\">\n",
+        "    <h1>Under Construction</h1>\n",
+        "    <p>AI & Data Science Portfolio — Week 4 Milestone: Empty but Live.</p>\n",
+        "  </div>\n",
+        "</body>\n",
+        "</html>\"\"\"\n",
         "\n",
-        "# 1. Print current working directory\n",
-        "current_dir = Path.cwd()\n",
-        "print(f\"Current working directory: {current_dir}\")\n",
+        "# Write the index.html file\n",
+        "output_file = Path(\"index.html\")\n",
+        "output_file.write_text(html_content, encoding=\"utf-8\")\n",
         "\n",
-        "# 2. Search common candidate relative paths\n",
-        "candidates = [\n",
-        "    Path(\"data/raw\") / target_filename,\n",
-        "    Path(\"../../data/raw\") / target_filename,\n",
-        "    Path(\"../data/raw\") / target_filename,\n",
-        "    Path(\"../../../data/raw\") / target_filename,\n",
-        "]\n",
-        "\n",
-        "file_path = None\n",
-        "for p in candidates:\n",
-        "    if p.resolve().exists():\n",
-        "        file_path = p.resolve()\n",
-        "        break\n",
-        "\n",
-        "# 3. Fallback: Search the repository tree upward\n",
-        "if not file_path:\n",
-        "    for parent in [current_dir] + list(current_dir.parents):\n",
-        "        matches = list(parent.glob(f\"**/{target_filename}\"))\n",
-        "        if matches:\n",
-        "            file_path = matches[0]\n",
-        "            break\n",
-        "\n",
-        "# 4. Load or report findings\n",
-        "if file_path and file_path.exists():\n",
-        "    print(f\"Found file at: {file_path}\")\n",
-        "    df = pd.read_csv(file_path)\n",
-        "    print(f\"Loaded dataset: {df.shape[0]} rows, {df.shape[1]} columns\")\n",
-        "else:\n",
-        "    print(f\"Could not find '{target_filename}' automatically.\")\n",
-        "    print(\"Files and folders in current directory:\", os.listdir(current_dir))\n",
-        "    if (current_dir.parent).exists():\n",
-        "        print(\"Files and folders in parent directory:\", os.listdir(current_dir.parent))"
+        "print(f\"File created successfully at: {output_file.resolve()}\")"
       ],
       "metadata": {
         "colab": {
           "base_uri": "https://localhost:8080/"
         },
-        "id": "6JkdP84rAmeh",
-        "outputId": "142abb9a-bd16-4fbb-ebcf-5185ad4e9688"
+        "id": "gCRDnUrODZpA",
+        "outputId": "a061bc5f-08bf-4ad3-a7d9-0c42dc8fa89d"
       },
       "execution_count": 2,
       "outputs": [
@@ -85,10 +85,7 @@
           "output_type": "stream",
           "name": "stdout",
           "text": [
-            "Current working directory: /content\n",
-            "Could not find 'content_refresh_anonymized.csv' automatically.\n",
-            "Files and folders in current directory: ['.config', 'sample_data']\n",
-            "Files and folders in parent directory: ['lib', 'sbin', 'etc', 'lib64', 'media', 'mnt', 'usr', 'home', 'proc', 'root', 'tmp', 'run', 'sys', 'dev', 'boot', 'var', 'srv', 'opt', 'bin', 'outputs', 'kaggle', '.dockerenv', 'tools', 'datalab', 'content', 'python-apt', 'python-apt.tar.xz', 'sbin.usr-is-merged', 'bin.usr-is-merged', 'lib.usr-is-merged']\n"
+            "File created successfully at: /content/index.html\n"
           ]
         }
       ]
